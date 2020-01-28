@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  mqtt-api:
+    build:
+      context: .
+      dockerfile: ./config/docker/broker.dockerfile
+    image: test/mqtt-api:latest
+    volumes:
+      - ./deploy/key.pem:/home/node/device-manager/deploy/key.pem
+      - ./deploy/cert.pem:/home/node/device-manager/deploy/cert.pem
+    restart: always
+    ports:
+      - '127.0.0.1:1883:1883'
+
+  api-proxy:
+    environment:
+      - MQTT_BROKER_PORT=1884
+      - MQTTS_BROKER_PORT=8884
+      - NGINX_SERVER_HOST=ed-X510URR
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./config/nginx/nginx.template:/etc/nginx/nginx.template
+      - ./deploy/key.pem:/etc/nginx/certs/key.pem
+      - ./deploy/cert.pem:/etc/nginx/certs/cert.pem
+      - ./log/nginx:/etc/nginx/log
+    depends_on:
+      - mqtt-api
+    network_mode: host 
+    command: /bin/bash -c "envsubst '$${MQTT_BROKER_PORT},$${MQTTS_BROKER_PORT},$${NGINX_SERVER_HOST}' < /etc/nginx/nginx.template > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
+

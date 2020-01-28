@@ -1,0 +1,18 @@
+{
+  "name": "aedes-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aedes": "git+https://git@github.com/moscajs/aedes.git",
+    "aedes-persistence": "^7.2.1",
+    "mqemitter": "^3.0.0",
+    "mqtt": "^3.0.0",
+    "mqtt-client": "^0.1.0"
+  }
+}

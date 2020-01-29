@@ -57,7 +57,8 @@ const onAuthenticate = async (client, username, password) => {
 
 
 const authenticate = (client, username, password, cb) => {
-  onAuthenticate(client, username, password)
+  
+  setTimeout(() => onAuthenticate(client, username, password)
     .then(status => {
       if (status !== 0) {
         return cb({ returnCode: status || 3 }, null);
@@ -67,7 +68,7 @@ const authenticate = (client, username, password, cb) => {
     .catch(e => {
       console.log('authenticate:err', e);
       return cb(e, null);
-    });
+    }), 1000)
 };
 
 

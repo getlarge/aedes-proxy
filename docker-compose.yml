@@ -1,17 +1,31 @@
 version: '3.7'
 
+networks:
+  aloes: 
+    driver: bridge
+
 services:
   mqtt-api:
     build:
       context: .
       dockerfile: ./config/docker/broker.dockerfile
     image: test/mqtt-api:latest
-    volumes:
-      - ./deploy/key.pem:/home/node/device-manager/deploy/key.pem
-      - ./deploy/cert.pem:/home/node/device-manager/deploy/cert.pem
     restart: always
-    ports:
-      - '127.0.0.1:1883:1883'
+    networks:
+      - aloes
+    # ports:
+      # - '127.0.0.1:1883:1883'
+  
+  mqtt-api-2:
+    build:
+      context: .
+      dockerfile: ./config/docker/broker.dockerfile
+    image: test/mqtt-api:latest
+    restart: always
+    networks:
+      - aloes
+    # ports:
+      # - '127.0.0.1:1883:1883'
 
   api-proxy:
     environment:
@@ -27,6 +41,11 @@ services:
       - ./log/nginx:/etc/nginx/log
     depends_on:
       - mqtt-api
-    network_mode: host 
+    networks:
+      - aloes
+    ports:
+      - '1884:1884'
+      - '8884:8884'
+    # network_mode: host 
     command: /bin/bash -c "envsubst '$${MQTT_BROKER_PORT},$${MQTTS_BROKER_PORT},$${NGINX_SERVER_HOST}' < /etc/nginx/nginx.template > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
 

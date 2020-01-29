@@ -13,7 +13,9 @@ stream {
 
   upstream aloes_mqtt_api_servers {
     least_conn;
-    server 127.0.0.1:1883;
+    server mqtt-api:1883;
+    server mqtt-api-2:1883;
+    # server 127.0.0.1:1883;
   }
 
   server {

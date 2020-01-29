@@ -17,4 +17,9 @@ Protocol decoder should be triggered only once when using TCP proxy that handles
 
 ## Current behaviour
 
-Protocol decoder is triggered twice 
+Protocol decoder is randomly triggered twice. 
+It might be a bug in the `lib/client.js`, `nextBatch` function ?
+
+![screenshot](./error_screenshot.png)
+
+

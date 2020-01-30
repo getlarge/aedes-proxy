@@ -77,14 +77,21 @@ const initServers = (brokerInterfaces, brokerInstance) => {
     .createServer(brokerInstance.handle)
     .listen(brokerInterfaces.mqtt.port);
 
-  return { tcpServer };
+  const wsServer = require('http')
+    .createServer()
+    .listen(brokerInterfaces.ws.port);
+
+  require('websocket-stream').createServer({ server: wsServer }, brokerInstance.handle);
+
+  return { tcpServer, wsServer};
 };
 
 
 broker.init = () => {
   broker.config = {
     interfaces: {
-      mqtt: { port: 1883 },
+      mqtt: { port: Number(process.env.MQTT_BROKER_PORT) || 1883 },
+      ws: { port: Number(process.env.WS_BROKER_PORT) || 3000 },
     },
   };
 
@@ -114,6 +121,7 @@ broker.init = () => {
 
   broker.instance.once('closed', () => {
     tcpServer.close();
+    wsServer.close();
   });
   broker.instance.on('client', client => {
     console.log('onClientConnect', client.id); 
@@ -134,7 +142,6 @@ broker.init = () => {
 
   broker.instance.on('connectionError', (client, err) => {
     console.log('onConnectionError', { clientId: client.id, error: err.message });
-
   });
 
 };

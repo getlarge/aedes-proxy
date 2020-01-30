@@ -16,9 +16,17 @@ const options = {
 
 
 const initClient = () => {
-  // let mqttBrokerUrl = 'mqtt://localhost:1884';
-  // let mqttBrokerUrl = 'mqtts://localhost:8884';
-  let mqttBrokerUrl = 'mqtts://ed-X510URR:8884';
+  let mqttBrokerUrl
+  // Bypassing TCP proxy
+  // mqttBrokerUrl = 'mqtt://localhost:1884';
+  // Bypassing HTTP proxy
+  // mqttBrokerUrl = 'ws://localhost:3001';
+  // Using TCP proxy
+  // mqttBrokerUrl = 'mqtt://ed-X510URR:1883';
+  // mqttBrokerUrl = 'mqtts://ed-X510URR:8883';
+  // Using HTTP proxy
+  mqttBrokerUrl = 'ws://ed-X510URR:80';
+  // mqttBrokerUrl = 'wss://ed-X510URR:443';
 
   mqttClient = mqtt.connect(mqttBrokerUrl, options);
 
@@ -37,8 +45,6 @@ const initClient = () => {
   mqttClient.on('message', packet => {
     console.log('mqtt-client message', packet);
   });
-
-  // mqttClient.subscribe(`${clientId}/rx/#`, { qos: 1 });
 
 };
 

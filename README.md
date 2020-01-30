@@ -22,4 +22,15 @@ It might be a bug in the `lib/client.js`, `nextBatch` function ?
 
 ![screenshot](./error_screenshot.png)
 
+## Possible solution
 
+Inside `!client.connackSent && client.broker.trustProxy && buf` condition block
+
+```js
+var { data, isProxy } = client.broker.decodeProtocol(client, buf)
+if (data) {
+  client._parser.parse(data)
+} else if (!isProxy) {
+  client._parser.parse(buf)
+}
+``` 

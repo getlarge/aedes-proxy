@@ -16,8 +16,7 @@ WORKDIR /home/node/$NODE_NAME
 
 COPY . ./
 
-RUN npm ci 
-
+# RUN npm ci 
 
 ###############################################################################
 # Step 2 : Run image

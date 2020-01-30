@@ -9,10 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aedes": "git+https://git@github.com/moscajs/aedes.git",
+    "aedes": "git+https://git@github.com/moscajs/aedes.git#master",
     "aedes-persistence": "^7.2.1",
+    "forwarded": "^0.1.2",
     "mqemitter": "^3.0.0",
     "mqtt": "^3.0.0",
-    "mqtt-client": "^0.1.0"
+    "mqtt-client": "^0.1.0",
+    "proxy-addr": "^2.0.5",
+    "websocket-stream": "^5.5.0"
   }
 }
